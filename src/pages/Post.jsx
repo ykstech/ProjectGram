@@ -40,11 +40,11 @@ export default function Post() {
             <Container>
                 <div className="flex border rounded-xl bg-gray-200">
                 <div className="w-1/2 flex  relative justify-center bg-gray-100  border rounded-xl p-2">
-                    <img  
+                  {post.featuredImage &&  <img  
                         src={appwriteService.getFilePreview(post.featuredImage)}
                         alt={post.title}
                         className="rounded-xl"
-                    />  <br/>
+                    /> } <br/>
                 
 
                     {isAuthor && (

@@ -40,7 +40,7 @@ function Header() {
 
   return (
     <>
-    <header className='w-full px-5  py-4  bg-gray-900'>
+    <header className='w-full px-5  py-4  bg-gray-900 shadow-2xl'>
       {/* <Container> */}
         <nav className='flex'>
           <div className='mr-4'>

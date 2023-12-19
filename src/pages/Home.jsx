@@ -1,33 +1,29 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import appwriteService from "../appwrite/config";
-import {Container, PostCard} from '../components'
+import { Container, PostCard } from '../components'
+import { getCachedData, saveDataToCache } from '../appwrite/caching';
 
 function Home() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
+        const cachedData = getCachedData();
+
+        if (cachedData) {
+            setPosts(cachedData);
+        }
+
+
         appwriteService.getPosts().then((posts) => {
             if (posts) {
-                setPosts(posts.documents)
+                setPosts(posts.documents);
+                saveDataToCache(posts.documents);
+
             }
         })
     }, [])
-  
-    // if (posts.length === 0) {
-    //     return (
-    //         <div className="w-full py-8 mt-4 text-center">
-    //             <Container>
-    //                 <div className="flex flex-wrap">
-    //                     <div className="p-2 w-full">
-    //                         <h1 className="text-2xl font-bold hover:text-gray-500">
-    //                             welcome to read posts
-    //                         </h1>
-    //                     </div>
-    //                 </div>
-    //             </Container>
-    //         </div>
-    //     )
-    // }
+
+
     return (
         <div className='w-full py-8'>
             <Container>

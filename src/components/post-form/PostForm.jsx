@@ -35,17 +35,22 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
-            const file = await appwriteService.uploadFile(data.image[0]);
+            const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
 
             if (file) {
                 const fileId = file.$id;
                 data.featuredImage = fileId;
+            }else{
+                data.featuredImage="";
+            }
                 const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
+                }else{
+                    console.log("error uploading post");
                 }
-            }
+            
         }
     };
 
@@ -91,10 +96,8 @@ export default function PostForm({ post }) {
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
-                {/* <label htmlFor="file-upload" className="cursor-pointer bg-blue-400 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-500">
-                Upload File
-                </label> */}
-                <Input labelclassName="cursor-pointer bg-blue-400 text-white py-2 px-4 mb-5 rounded-md shadow-md hover:bg-blue-500" label="Select Image :" type="file" className="hidden" accept="image/png, image/jpg, image/jpeg, image/gif"     {...register("image", { required: !post })} />
+               
+                <Input labelclassName="cursor-pointer bg-blue-400 text-white py-2 px-4 mb-5 rounded-md shadow-md hover:bg-blue-500" label="Select Image :" type="file" className="hidden" accept="image/png, image/jpg, image/jpeg, image/gif"     {...register("image", { required: false })} />
 
                 {/* <Input
                     label="Featured Image :"
@@ -103,7 +106,7 @@ export default function PostForm({ post }) {
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 /> */}
-                {post && (
+                {post && post.featuredImage && (
                     <div className="w-full mb-4 ">
                         <img
                             src={appwriteService.getFilePreview(post.featuredImage)}
